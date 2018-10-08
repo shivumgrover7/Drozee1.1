@@ -35,6 +35,7 @@
                                     <map>
                                       <entry key="outputName" value="ic_lock" />
                                       <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="f27122" />
                                     </map>
                                   </option>
                                 </PersistentState>
