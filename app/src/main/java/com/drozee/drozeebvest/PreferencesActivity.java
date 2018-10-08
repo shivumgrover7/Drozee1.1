@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,14 +27,35 @@ public class PreferencesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(viewAdapter);
 
-        Button submit = (Button)findViewById(R.id.submitBTN);
+        Button add = (Button)findViewById(R.id.addBTN);
+        final Button submit = (Button)findViewById(R.id.submitBTN);
         final EditText prefET = (EditText)findViewById(R.id.prefET);
+        final EditText authET = (EditText)findViewById(R.id.authorET);
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pref.add(prefET.getText().toString() + "," + authET.getText());
+                prefET.setText("");
+                authET.setText("");
+                viewAdapter.notifyDataSetChanged();
+                if(viewAdapter.getItemCount() >= 5)
+                {
+                    submit.setBackgroundResource(R.drawable.edittext);
+                }
+            }
+        });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pref.add(prefET.getText().toString());
-                prefET.setText("");
-                viewAdapter.notifyDataSetChanged();
+                if(viewAdapter.getItemCount() >= 5)
+                {
+
+                }
+                else
+                {
+                    Toast.makeText(PreferencesActivity.this, "Please enter at least 5 books", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
