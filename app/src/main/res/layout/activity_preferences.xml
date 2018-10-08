@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/gradientgreen"
     tools:context=".PreferencesActivity">
 
     <TextView
+        android:id="@+id/prefTV"
+        android:textColor="#FFFFFF"
         android:layout_width="match_parent"
+        android:layout_marginTop="36sp"
+        android:padding="24sp"
         android:layout_height="wrap_content"
         android:text="Preferences"
         android:textSize="36sp"/>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:layout_marginBottom="36sp"
+        android:layout_below="@id/prefTV">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/etLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -25,6 +36,8 @@
                 android:id="@+id/ET1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
                 android:layout_margin="16sp"
                 android:hint="Enter Preference" />
 
@@ -91,5 +104,15 @@
                 android:layout_margin="16sp"
                 android:hint="Enter Preference" />
         </LinearLayout>
+            <Button
+                android:text="SUBMIT"
+                android:id="@+id/prefSubmitbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/etLL"
+                android:layout_marginBottom="12sp"/>
+        </RelativeLayout>
     </ScrollView>
-</LinearLayout>
+
+</RelativeLayout>
