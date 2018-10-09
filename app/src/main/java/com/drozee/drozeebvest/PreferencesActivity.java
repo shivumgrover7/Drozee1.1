@@ -61,6 +61,7 @@ public class PreferencesActivity extends AppCompatActivity {
                         mListReference.child("Books").push().setValue(pref);
                     else
                         mListReference.child("Books").setValue(pref);
+                    Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
 
                 }
                 else
