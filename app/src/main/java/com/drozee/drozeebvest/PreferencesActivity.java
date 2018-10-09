@@ -1,108 +1,134 @@
 package com.drozee.drozeebvest;
 
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PreferencesActivity extends AppCompatActivity {
+    ArrayList<String> pref = new ArrayList<String>();
+    RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(this, pref);
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mListReference;
     FirebaseAuth mAuth;
     String user;
-    RecyclerView recyclerView;
-    List<Books> booklist;
-    RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(this, booklist);
-    public EditText prefET;
 
-    public EditText authET;
-
-
-
+    DatabaseReference mBooksReference;
+    ChildEventListener mChildEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
         mAuth =  FirebaseAuth.getInstance();
-        booklist = new ArrayList<> ();
-
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mListReference = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
-        recyclerView = (RecyclerView) findViewById(R.id.prefRV);
+//        String uid = user.getUid();
+//        if(uid == null)
+//        {
+//            uid = "Anonymous";
+//        }
+        mListReference = mFirebaseDatabase.getReference().child("Books").child("Anonymous");
+        mBooksReference = mListReference.child("Books").child("uid");
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.prefRV);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.setAdapter(viewAdapter);
+        recyclerView.setAdapter(viewAdapter);
+
         user = mAuth.getUid();
-        final Button add = (Button)findViewById(R.id.addBTN);
-//        final Button submit = (Button)findViewById(R.id.submitBTN);
-        prefET = (EditText)findViewById(R.id.prefET);
-        authET = (EditText)findViewById(R.id.authorET);
-//        submit.setEnabled(false);
+
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    ArrayList<String> lst = new ArrayList<String>(); // Result will be holded Here
+                        lst.add(String.valueOf(dataSnapshot.getValue()));
+                        for(int z = 0; z < lst.size(); z++)
+                        {
+                                String[] atom = lst.get(z).split(",");
+                                pref.add(atom[0] + "," + atom[1]);
+
+
+                        }
+                for (int a = 0; a < pref.size(); a++) {
+                    Log.i("Preferences", Integer.toString(pref.get(0).length()));
+                }
+                viewAdapter.notifyDataSetChanged();}
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        mListReference.addChildEventListener(mChildEventListener);
+        Button add = (Button)findViewById(R.id.addBTN);
+        final Button submit = (Button)findViewById(R.id.nextBTN);
+        final EditText prefET = (EditText)findViewById(R.id.prefET);
+        final EditText authET = (EditText)findViewById(R.id.authorET);
+        submit.setEnabled(false);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addbook();
-//                if(authET.getText().toString()!= "" && prefET.getText().toString()!= ""){
-//                pref.add(prefET.getText().toString() + "," + authET.getText());
-//                prefET.setText("");
-//                authET.setText("");
-//                viewAdapter.notifyDataSetChanged();
-//                if(viewAdapter.getItemCount() >= 5)
-//                {
-////                    submit.setBackgroundResource(R.drawable.edittext);
-//                    submit.setEnabled(true);
-//                if (prefET.getText().toString().equals("") || authET.getText().toString().equals("")) {
-//                    Toast.makeText(PreferencesActivity.this, "Either field cannot be blank", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-//                    pref.add(prefET.getText().toString() + "," + authET.getText().toString());
-//                    prefET.setText("");
-//                    authET.setText("");
-//                    viewAdapter.notifyDataSetChanged();
-//                    if (viewAdapter.getItemCount() >= 5)
-//                    {
-//                        submit.setBackgroundResource(R.drawable.edittext);
-//                    }
-//                }
-//            }}
-            }});
-//        submit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(viewAdapter.getItemCount() >= 5)
-//                {
-//              if(viewAdapter.getItemCount() == 1)
-//                        mListReference.child("Books").child(user).push().setValue(pref);
-//                    else
-//                        mListReference.child("Books").child(user).setValue(pref);
-//                    Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
-//
-//                }
-//                else
-//                {
-//                    Toast.makeText(PreferencesActivity.this, "Please enter at least 5 books", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+
+                if(authET.getText().toString().equals("") && prefET.getText().toString().equals("")) {
+                    Toast.makeText(PreferencesActivity.this, "Either field cannot be blank", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    pref.add(prefET.getText().toString() + "," + authET.getText().toString());
+                    prefET.setText("");
+                    authET.setText("");
+                    mListReference.setValue(pref);
+                    Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
+            }
+        }});
+        submit.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          if (viewAdapter.getItemCount() >= 5) {
+                                              if (viewAdapter.getItemCount() == 1)
+                                                  mListReference.child("Books").child(user).push().setValue(pref);
+                                              else
+                                                  mListReference.child("Books").child(user).setValue(pref);
+                                              Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
+                                          }
+                                      }
+                                  });
+
 
 
 
@@ -111,47 +137,5 @@ public class PreferencesActivity extends AppCompatActivity {
         //Set Custom Font
         //Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "CaviarDreams_Bold.ttf");
 
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart ( );
-        mListReference.addValueEventListener (new ValueEventListener( ) {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                booklist.clear ();
-                for (DataSnapshot applianceSnapshot : dataSnapshot.getChildren ()){
-
-                    Books bookslista = applianceSnapshot.getValue (Books.class);
-                    booklist.add (bookslista);
-                }
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter (PreferencesActivity.this, booklist);
-                recyclerView.setAdapter (adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-    private void addbook() {
-        String bookname = prefET.getText().toString();
-        String author = authET.getText().toString();
-        if(prefET.getText().toString().equals("") || authET.getText().toString().equals("")) {
-            Toast.makeText(PreferencesActivity.this, "Book or Author name cannot be empty", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            prefET.setText("");
-            authET.setText("");
-            Books books = new Books(bookname, author);
-            mListReference.child(bookname).setValue(books);
-            Toast.makeText(this, "Book added", Toast.LENGTH_LONG).show();
-
-        }
     }
 }
