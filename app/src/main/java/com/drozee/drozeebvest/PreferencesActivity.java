@@ -38,19 +38,22 @@ public class PreferencesActivity extends AppCompatActivity {
         final Button submit = (Button)findViewById(R.id.submitBTN);
         final EditText prefET = (EditText)findViewById(R.id.prefET);
         final EditText authET = (EditText)findViewById(R.id.authorET);
-
+        submit.setEnabled(false);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(authET.getText().toString()!= "" && prefET.getText().toString()!= ""){
                 pref.add(prefET.getText().toString() + "," + authET.getText());
                 prefET.setText("");
                 authET.setText("");
                 viewAdapter.notifyDataSetChanged();
                 if(viewAdapter.getItemCount() >= 5)
                 {
-                    submit.setBackgroundResource(R.drawable.edittext);
+//                    submit.setBackgroundResource(R.drawable.edittext);
+                    submit.setEnabled(true);
                 }
-            }
+            }}
         });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

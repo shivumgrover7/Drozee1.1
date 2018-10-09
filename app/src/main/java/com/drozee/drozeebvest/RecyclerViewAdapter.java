@@ -45,8 +45,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         TextView tv = holder.itemView.findViewById(R.id.prefTV);
         TextView auth = holder.itemView.findViewById(R.id.authorET);
+        if((preferences.get(position).split(",")[0]!= "")&&(preferences.get(position).split(",")[1]!= "")){
         tv.setText(preferences.get(position).split(",")[0]);
-        auth.setText(preferences.get(position).split(",")[1]);
+        auth.setText(preferences.get(position).split(",")[1]);}
     }
 
     @Override

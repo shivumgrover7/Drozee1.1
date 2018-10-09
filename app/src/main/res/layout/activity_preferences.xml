@@ -64,7 +64,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="12sp"
         android:layout_marginBottom="52sp"
-        android:background="@drawable/btn_disabled"
+        android:background="@drawable/edittext"
+
         android:text="Submit" />
 
 </RelativeLayout>
