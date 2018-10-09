@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,19 +22,22 @@ public class PreferencesActivity extends AppCompatActivity {
     RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(this, pref);
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mListReference;
+    FirebaseAuth mAuth;
+    String user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
+        mAuth =  FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mListReference = mFirebaseDatabase.getReference();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.prefRV);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(viewAdapter);
-
+        user = mAuth.getUid();
         Button add = (Button)findViewById(R.id.addBTN);
         final Button submit = (Button)findViewById(R.id.submitBTN);
         final EditText prefET = (EditText)findViewById(R.id.prefET);
@@ -61,9 +65,9 @@ public class PreferencesActivity extends AppCompatActivity {
                 if(viewAdapter.getItemCount() >= 5)
                 {
               if(viewAdapter.getItemCount() == 1)
-                        mListReference.child("Books").push().setValue(pref);
+                        mListReference.child("Books").child(user).push().setValue(pref);
                     else
-                        mListReference.child("Books").setValue(pref);
+                        mListReference.child("Books").child(user).setValue(pref);
                     Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
 
                 }
