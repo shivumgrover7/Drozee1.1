@@ -1,14 +1,18 @@
 package com.drozee.drozeebvest;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,21 +40,27 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Button buttonGallery, buttonCamera,buttonUpdate;
     private ImageView imageView;
     private Uri file;
-    private StorageReference mStorage;
+    private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idlogin);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
 
         buttonCamera = (Button) findViewById(R.id.button_photo);
         buttonGallery = (Button) findViewById(R.id.button_Gallery);
         imageView = (ImageView) findViewById(R.id.imageview);
         buttonUpdate = (Button) findViewById(R.id.button_update);
-
         mStorage = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        useriD = mAuth.getCurrentUser().getUid();
+
+
 
 //        buttonGallery.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -73,11 +83,47 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
 //                startActivityForResult(intent,100);
 //            }
 //        });
+        allowpermissioncamera();
+
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                == PackageManager.PERMISSION_DENIED){
+//                Toast.makeText(getApplicationContext(),"denied camera",Toast.LENGTH_LONG).show();
+//                allowpermissioncamera();
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                == PackageManager.PERMISSION_DENIED){
+//                allowpermissionstorage();
+//            Toast.makeText(getApplicationContext(),"denied storage",Toast.LENGTH_LONG).show();
+//
+//
+//        }
+
+
 
         buttonGallery.setOnClickListener(this);
         buttonCamera.setOnClickListener(this);
         buttonUpdate.setOnClickListener(this);
     }
+
+//    private void allowpermissionstorageread() {
+//        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+//
+//    }
+    private void allowpermissionstorage() {
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+
+    }
+
+    private void allowpermissioncamera() {
+
+        ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        }, 100);
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
@@ -171,52 +217,81 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading....");
-        StorageReference riversRef = mStorage.child("ICARDS");
+        StorageReference riversRef = mStorage.child(useriD).child("ICARDS");
         progressDialog.show();
 
 
+        if(file!=null) {
+            riversRef.putFile(file)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "File Uploaded", Toast.LENGTH_SHORT).show();
 
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(),"File Uploaded",Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
 
+
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    progressDialog.setMessage(((int) progress) + "% Uploaded.. ");
+                    if(progress==100){
+                        startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(),exception.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
 
-
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                progressDialog.setMessage(((int)progress)+"% Uploaded.. ");
-
-            }
-        });
-
-    }
+        }
+        }
 
 
     @Override
     public void onClick(View v) {
         if(v == buttonCamera){
             //choose camera
-            takePhoto();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_DENIED){
+                Toast.makeText(this,"Please allow permssion for camera",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                allowpermissioncamera();
+
+            }
+            else {
+            takePhoto();}
 
 
         }
         else if(v == buttonGallery)
         {
             //choose gallery
-            showFileChooser();
 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED){
+                Toast.makeText(this,"Please allow permssion for storage",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                allowpermissionstorage();
+                startActivity(new Intent(this, PreferencesActivity.class));
+            }
+
+            else if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED){
+                Toast.makeText(this,"Please allow permssion for storage",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                allowpermissionstorage();
+
+            }
+
+            else{
+            showFileChooser();
+        }
         }
         else if(v== buttonUpdate){
             //upload file
