@@ -56,9 +56,22 @@ public class PreferencesActivity extends AppCompatActivity {
                 {
 //                    submit.setBackgroundResource(R.drawable.edittext);
                     submit.setEnabled(true);
+                if (prefET.getText().toString().equals("") || authET.getText().toString().equals("")) {
+                    Toast.makeText(PreferencesActivity.this, "Either field cannot be blank", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    pref.add(prefET.getText().toString() + "," + authET.getText().toString());
+                    prefET.setText("");
+                    authET.setText("");
+                    viewAdapter.notifyDataSetChanged();
+                    if (viewAdapter.getItemCount() >= 5)
+                    {
+                        submit.setBackgroundResource(R.drawable.edittext);
+                    }
                 }
             }}
-        });
+        }});
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
