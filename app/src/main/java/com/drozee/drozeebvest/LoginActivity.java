@@ -32,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.imageButton)
     public void onViewClicked() {
-        startActivity(new Intent(this, PreferencesActivity.class));
+        //startActivity(new Intent(this, PreferencesActivity.class));
+        startActivity(new Intent(this, IDLogin.class));
+
     }
 }
