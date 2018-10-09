@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +37,8 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Button buttonGallery, buttonCamera,buttonUpdate;
     private ImageView imageView;
     private Uri file;
+    String UID;
+   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private StorageReference mStorage;
     private FirebaseAuth mAuth;
 
@@ -43,8 +46,11 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idlogin);
-
-
+//        UID = user.getUid();
+//        if(UID == null)
+//        {
+//            UID = "Anonymous";
+//        }
         buttonCamera = (Button) findViewById(R.id.button_photo);
         buttonGallery = (Button) findViewById(R.id.button_Gallery);
         imageView = (ImageView) findViewById(R.id.imageview);
@@ -97,6 +103,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
             file = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), file);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 250,250, false);
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -171,7 +178,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading....");
-        StorageReference riversRef = mStorage.child("ICARDS");
+        StorageReference riversRef = mStorage.child("Anonymous").child("ICARD");
         progressDialog.show();
 
 
@@ -182,6 +189,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(),"File Uploaded",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(IDLogin.this, PreferencesActivity.class));
 
                     }
                 })

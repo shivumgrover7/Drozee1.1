@@ -43,8 +43,12 @@ public class PreferencesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        String uid = user.getUid();
-        mListReference = mFirebaseDatabase.getReference().child("Books").child(uid);
+//        String uid = user.getUid();
+//        if(uid == null)
+//        {
+//            uid = "Anonymous";
+//        }
+        mListReference = mFirebaseDatabase.getReference().child("Books").child("Anonymous");
         mBooksReference = mListReference.child("Books").child("uid");
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.prefRV);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -54,19 +58,19 @@ public class PreferencesActivity extends AppCompatActivity {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    List<String> lst = new ArrayList<String>(); // Result will be holded Here
-  //                  for(DataSnapshot dsp : dataSnapshot.getChildren()){
+                    ArrayList<String> lst = new ArrayList<String>(); // Result will be holded Here
                         lst.add(String.valueOf(dataSnapshot.getValue()));
                         for(int z = 0; z < lst.size(); z++)
                         {
-                            Log.v("Details(Child): ", lst.get(z));
-                            String[] atom = lst.get(z).split(",");
-                            pref.add(atom[0] + "," + atom[1]);
-                            for(int i = 0; i < pref.size(); i++)
-                                Log.v("PrefList: ", pref.get(i));
+                                String[] atom = lst.get(z).split(",");
+                                pref.add(atom[0] + "," + atom[1]);
+
 
                         }
-            }
+                for (int a = 0; a < pref.size(); a++) {
+                    Log.i("Preferences", Integer.toString(pref.get(0).length()));
+                }
+                viewAdapter.notifyDataSetChanged();}
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -89,7 +93,7 @@ public class PreferencesActivity extends AppCompatActivity {
         };
         mListReference.addChildEventListener(mChildEventListener);
         Button add = (Button)findViewById(R.id.addBTN);
-        final Button submit = (Button)findViewById(R.id.submitBTN);
+        final Button submit = (Button)findViewById(R.id.nextBTN);
         final EditText prefET = (EditText)findViewById(R.id.prefET);
         final EditText authET = (EditText)findViewById(R.id.authorET);
 
@@ -110,13 +114,13 @@ public class PreferencesActivity extends AppCompatActivity {
                             mListReference.setValue(pref);
                         else
                             mListReference.setValue(pref);
-                            Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PreferencesActivity.this, "Uploading Data", Toast.LENGTH_SHORT).show();
 
                     }
-                    viewAdapter.notifyDataSetChanged();
                 }
             }
         });
+
 
 
 

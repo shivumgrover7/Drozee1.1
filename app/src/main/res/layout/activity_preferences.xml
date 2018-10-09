@@ -52,19 +52,20 @@
         android:id="@+id/prefRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/submitBTN"
+        android:layout_above="@id/nextBTN"
         android:layout_below="@id/addBTN" />
 
     <Button
-        android:id="@+id/submitBTN"
+        android:id="@+id/nextBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="12sp"
+        android:layout_marginTop="4sp"
         android:layout_marginBottom="52sp"
         android:background="@drawable/btn_disabled"
-        android:text="Submit" />
+        android:text="Next" />
 
 </RelativeLayout>
