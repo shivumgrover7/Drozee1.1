@@ -20,14 +20,15 @@
     <TextView
         android:id="@+id/authorTV"
         android:layout_width="wrap_content"
-        android:textStyle="italic"
-        android:layout_marginTop="24sp"
         android:layout_height="wrap_content"
         android:layout_below="@id/prefTV"
-
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10sp"
+
+        android:layout_marginTop="24sp"
+        android:fontFamily="@font/bad_script"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textStyle="italic" />
 
 </RelativeLayout>

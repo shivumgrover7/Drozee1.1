@@ -26,6 +26,7 @@
             android:layout_below="@id/prefTV"
             android:layout_margin="2sp"
             android:hint="Book Name"
+
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
 
@@ -37,6 +38,8 @@
             android:layout_margin="2sp"
             android:hint="Author"
             android:textColor="@color/white"
+            android:alpha="0.9"
+
             android:textColorHint="@color/white" />
 
         <Button
@@ -46,6 +49,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@id/authorET"
             android:layout_margin="8sp"
+            android:alpha="0.9"
             android:background="@drawable/edittext"
             android:text="Add" />
 
@@ -53,7 +57,9 @@
         android:id="@+id/prefRV"
         android:layout_below="@id/addBTN"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:padding="10sp"
+        android:layout_height="wrap_content"
+        android:alpha="0.9"/>
 
 
 </RelativeLayout>

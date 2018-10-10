@@ -109,8 +109,8 @@ public class PreferencesActivity extends AppCompatActivity {
 
 
         //Set Custom Font
-        //Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "CaviarDreams_Bold.ttf");
-
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "CaviarDreams_Bold.ttf");
+        add.setTypeface(myCustomFont);
     }
 
 
