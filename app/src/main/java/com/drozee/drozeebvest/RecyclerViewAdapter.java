@@ -10,10 +10,16 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter{
     private Context mContext;
-    private ArrayList<String> preferences;
+    private List<Books> booksList;
+
+    public RecyclerViewAdapter(Context c, List<Books> mbooksList) {
+        mContext = c;
+        booksList = mbooksList;
+    }
 
 
 
@@ -27,10 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
             author = (TextView)view.findViewById(R.id.authorET);
         }
     }
-    public RecyclerViewAdapter(Context c, ArrayList<String> prefs) {
-        mContext = c;
-        preferences = prefs;
-    }
+
 
     @NonNull
     @Override
@@ -45,14 +48,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         TextView tv = holder.itemView.findViewById(R.id.prefTV);
         TextView auth = holder.itemView.findViewById(R.id.authorET);
-        //changed
-        if((preferences.get(position).split(",")[0]!= "")&&(preferences.get(position).split(",")[1]!= "")){
-        tv.setText(preferences.get(position).split(",")[0]);
-        auth.setText(preferences.get(position).split(",")[1]);}
+        Books books = booksList.get(position);
+
+        tv.setText(books.getBookname());
+        auth.setText(books.getAuthor());
     }
 
     @Override
     public int getItemCount() {
-        return preferences.size();
+        return booksList.size();
     }
 }

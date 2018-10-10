@@ -18,13 +18,6 @@
         android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@id/linear"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/prefTV"
-        android:orientation="vertical">
 
         <EditText
             android:id="@+id/prefET"
@@ -52,39 +45,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@id/authorET"
-            android:layout_margin="2sp"
+            android:layout_margin="8sp"
             android:background="@drawable/edittext"
             android:text="Add" />
-    </LinearLayout>
 
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/prefRV"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@id/submitBTN"-->
-        <!--android:layout_below="@id/addBTN" />-->
-
-
-    <Button
-        android:id="@+id/submitBTN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="12sp"
-        android:layout_marginBottom="52sp"
-        android:background="@drawable/edittext"
-
-        android:text="Submit" />
-
-    <ListView
-        android:id="@+id/lisst"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/prefRV"
+        android:layout_below="@id/addBTN"
         android:layout_width="match_parent"
-        android:layout_height="378dp"
-        android:layout_alignTop="@id/linear"
-        android:layout_marginBottom="40sp"
-        android:layout_marginTop="170sp" />
+        android:layout_height="wrap_content"/>
+
 
 </RelativeLayout>
