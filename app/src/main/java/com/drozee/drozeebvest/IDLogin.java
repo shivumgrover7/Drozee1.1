@@ -42,6 +42,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Uri file;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
+    private Button buttonSkip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,11 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         buttonUpdate = (Button) findViewById(R.id.button_update);
         mStorage = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        buttonSkip = (Button) findViewById(R.id.button_Skip);
 
         useriD = mAuth.getCurrentUser().getUid();
+
+        buttonSkip.setOnClickListener(this);
 
 
 
@@ -201,8 +205,13 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                 "IMG_" + timeStamp + ".jpg");
     }
     private void showFileChooser(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
+//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
+
+        Intent galleryIntent = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent , 100);
     }
     private void takePhoto(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -294,11 +303,15 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         }
         }
         else if(v== buttonUpdate){
-            //upload file
-            startActivity(new Intent(this,PreferencesActivity.class));
+           // startActivity(new Intent(this,PreferencesActivity.class));
 
-//            uploadFile();
+        uploadFile();
     //            startActivity(new Intent(this,PreferencesActivity.class));
+        }
+        else if(v==buttonSkip)
+        {
+            Intent intent = new Intent(IDLogin.this,PreferencesActivity.class);
+            startActivity(intent);
         }
     }
 }

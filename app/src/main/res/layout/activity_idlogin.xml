@@ -16,14 +16,12 @@
         android:layout_marginBottom="219dp" />
 
 
-        
     <Button
         android:id="@+id/button_Gallery"
         android:layout_width="180sp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/imageview"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="151dp"
         android:background="@drawable/edit_round"
         android:text="From Gallery"
         android:textSize="20sp" />
@@ -35,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="161dp"
         android:background="@drawable/edit_round"
         android:text="Take photo"
 
@@ -47,9 +45,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
+        android:layout_marginBottom="102dp"
         android:background="@drawable/edit_round"
         android:text="Upload"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button_Skip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_update"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-98dp"
+        android:background="@drawable/edit_round"
+        android:text="SKIP"
         android:textSize="20sp" />
 
 </RelativeLayout>
