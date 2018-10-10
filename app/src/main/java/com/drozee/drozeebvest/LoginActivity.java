@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +14,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import butterknife.BindView;
@@ -28,7 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.imageButton)
     Button imageButton;
     FirebaseAuth mAuth;
+    DatabaseReference databaseReference;
     FirebaseStorage mStorage;
+    String pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
         mStorage = FirebaseStorage.getInstance();
         imageButton.setTypeface(typeface);
+
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Photos").child(mAuth.getCurrentUser().getUid());
         mAuth = FirebaseAuth.getInstance();
+
 
     }
 
@@ -84,12 +95,45 @@ public class LoginActivity extends AppCompatActivity {
 //                    progressBar.setVisibility (View.GONE);
                     if (task.isSuccessful ())
                     {
-                        //if login is successful then
-                        Intent intent = new Intent (LoginActivity.this, IDLogin.class);
-                        intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity (intent);
-                        Toast.makeText (getApplicationContext (),"log in",Toast.LENGTH_SHORT).show ();
+                        databaseReference = FirebaseDatabase.getInstance().getReference("Photos").child(mAuth.getCurrentUser().getUid());
 
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                pic = dataSnapshot.getValue().toString();
+                                Log.i("PAC",pic);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                pic = dataSnapshot.getValue().toString();
+                                Log.i("PAC",pic);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Toast.makeText(getApplicationContext(),pic,Toast.LENGTH_SHORT).show();
+                        //if login is successful then
+                        if(pic == "{picture?=1}"){
+                        Intent intent = new Intent (LoginActivity.this, PreferencesActivity.class);
+                        intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity (intent);}
+                        else {
+                            Intent intent = new Intent (LoginActivity.this, IDLogin.class);
+                            intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity (intent);}
                     }else
                     {
                         //else
