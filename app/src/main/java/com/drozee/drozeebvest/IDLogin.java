@@ -295,7 +295,10 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         }
         else if(v== buttonUpdate){
             //upload file
-            uploadFile();
+            startActivity(new Intent(this,PreferencesActivity.class));
+
+//            uploadFile();
+    //            startActivity(new Intent(this,PreferencesActivity.class));
         }
     }
 }
