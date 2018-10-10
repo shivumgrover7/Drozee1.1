@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.imageButton)
     Button imageButton;
     FirebaseAuth mAuth;
+    FirebaseStorage mStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
+        mStorage = FirebaseStorage.getInstance();
         imageButton.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
 
@@ -82,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful ())
                     {
                         //if login is successful then
-
                         Intent intent = new Intent (LoginActivity.this, IDLogin.class);
                         intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity (intent);

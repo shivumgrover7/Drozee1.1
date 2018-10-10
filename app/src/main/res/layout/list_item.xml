@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12sp"
     android:layout_marginBottom="12sp"
-    android:background="@drawable/gradient_list">
+    android:background="@drawable/edittext">
 
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="36sp"/>
 
     <TextView
@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/prefTV"
         android:layout_centerHorizontal="true"
-        android:textColor="#D3D3D3"
+        android:layout_marginBottom="10sp"
+        android:textColor="@color/black"
         android:textSize="16sp"/>
 
 </RelativeLayout>
