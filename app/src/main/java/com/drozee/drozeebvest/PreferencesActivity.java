@@ -140,14 +140,30 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
 
+
+
+//    private void addbook() {
+//        String bookname = prefET.getText().toString();
+//        String author = authET.getText().toString();
+//
+//        Books books = new Books(bookname,author);
+//        mListReference.child(bookname).setValue(books);
+//        Toast.makeText (this, "Book added",Toast.LENGTH_LONG).show ();
+
     private void addbook() {
         String bookname = prefET.getText().toString();
         String author = authET.getText().toString();
+        if(prefET.getText().toString().equals("") || authET.getText().toString().equals("")) {
+            Toast.makeText(PreferencesActivity.this, "Book or Author name cannot be empty", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            prefET.setText("");
+            authET.setText("");
+            Books books = new Books(bookname, author);
+            mListReference.child(bookname).setValue(books);
+            Toast.makeText(this, "Book added", Toast.LENGTH_LONG).show();
 
-        Books books = new Books(bookname,author);
-        mListReference.child(bookname).setValue(books);
-        Toast.makeText (this, "Book added",Toast.LENGTH_LONG).show ();
-
-
+        }
     }
 }

@@ -11,60 +11,49 @@
         android:id="@+id/prefTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="36sp"
         android:padding="24sp"
         android:text="Preferences"
         android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/prefET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@id/linear"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/prefTV"
-        android:orientation="vertical">
+        android:layout_below="@id/prefTV"
+        android:layout_margin="12sp"
+        android:hint="Book Name"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
 
-        <EditText
-            android:id="@+id/prefET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/prefTV"
-            android:layout_margin="2sp"
-            android:hint="Book Name"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+    <EditText
+        android:id="@+id/authorET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/prefET"
+        android:layout_margin="12sp"
+        android:hint="Author"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
 
-        <EditText
-            android:id="@+id/authorET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/prefET"
-            android:layout_margin="2sp"
-            android:hint="Author"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
-
-        <Button
-            android:id="@+id/addBTN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/authorET"
-            android:layout_margin="2sp"
-            android:background="@drawable/edittext"
-            android:text="Add" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/addBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/authorET"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="12sp"
+        android:background="@drawable/edittext"
+        android:text="Add" />
 
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/prefRV"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@id/submitBTN"-->
-        <!--android:layout_below="@id/addBTN" />-->
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/prefRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/submitBTN"
+        android:layout_below="@id/addBTN" />
 
     <Button
         android:id="@+id/submitBTN"
@@ -78,13 +67,5 @@
         android:background="@drawable/edittext"
 
         android:text="Submit" />
-
-    <ListView
-        android:id="@+id/lisst"
-        android:layout_width="match_parent"
-        android:layout_height="378dp"
-        android:layout_alignTop="@id/linear"
-        android:layout_marginBottom="40sp"
-        android:layout_marginTop="170sp" />
 
 </RelativeLayout>
