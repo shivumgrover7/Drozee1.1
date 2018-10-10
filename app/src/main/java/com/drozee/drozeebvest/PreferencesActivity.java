@@ -23,14 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreferencesActivity extends AppCompatActivity {
-    ArrayList<String> pref = new ArrayList<String>();
-    RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(this, pref);
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mListReference;
     FirebaseAuth mAuth;
     String user;
-    ListView listViewl;
+    RecyclerView recyclerView;
     List<Books> booklist;
+    RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(this, booklist);
     public EditText prefET;
 
     public EditText authET;
@@ -42,26 +41,25 @@ public class PreferencesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
         mAuth =  FirebaseAuth.getInstance();
-        listViewl = (ListView) findViewById (R.id.lisst);
         booklist = new ArrayList<> ();
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mListReference = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.prefRV);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView = (RecyclerView) findViewById(R.id.prefRV);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.setAdapter(viewAdapter);
         user = mAuth.getUid();
         final Button add = (Button)findViewById(R.id.addBTN);
 //        final Button submit = (Button)findViewById(R.id.submitBTN);
-          prefET = (EditText)findViewById(R.id.prefET);
+        prefET = (EditText)findViewById(R.id.prefET);
         authET = (EditText)findViewById(R.id.authorET);
 //        submit.setEnabled(false);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    addbook();
+                addbook();
 //                if(authET.getText().toString()!= "" && prefET.getText().toString()!= ""){
 //                pref.add(prefET.getText().toString() + "," + authET.getText());
 //                prefET.setText("");
@@ -86,7 +84,7 @@ public class PreferencesActivity extends AppCompatActivity {
 //                    }
 //                }
 //            }}
-        }});
+            }});
 //        submit.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -128,8 +126,8 @@ public class PreferencesActivity extends AppCompatActivity {
                     Books bookslista = applianceSnapshot.getValue (Books.class);
                     booklist.add (bookslista);
                 }
-                BooksListAdapter adapter = new BooksListAdapter (PreferencesActivity.this, booklist);
-                listViewl.setAdapter (adapter);
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter (PreferencesActivity.this, booklist);
+                recyclerView.setAdapter (adapter);
             }
 
             @Override
@@ -139,16 +137,6 @@ public class PreferencesActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-//    private void addbook() {
-//        String bookname = prefET.getText().toString();
-//        String author = authET.getText().toString();
-//
-//        Books books = new Books(bookname,author);
-//        mListReference.child(bookname).setValue(books);
-//        Toast.makeText (this, "Book added",Toast.LENGTH_LONG).show ();
 
     private void addbook() {
         String bookname = prefET.getText().toString();
