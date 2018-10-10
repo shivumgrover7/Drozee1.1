@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +44,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Uri file;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
+    private TextView nextActivityGo;
     private Button buttonSkip;
 
     @Override
@@ -58,12 +61,22 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         buttonUpdate = (Button) findViewById(R.id.button_update);
         mStorage = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        buttonSkip = (Button) findViewById(R.id.button_Skip);
-
+//        buttonSkip = (Button) findViewById(R.id.button_Skip);
+        nextActivityGo = findViewById(R.id.textView5);
         useriD = mAuth.getCurrentUser().getUid();
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
+        buttonCamera.setTypeface(typeface);
+        buttonGallery.setTypeface(typeface);
+        buttonUpdate.setTypeface(typeface
 
-        buttonSkip.setOnClickListener(this);
+        );
 
+        nextActivityGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
+            }
+        });
 
 
 //        buttonGallery.setOnClickListener(new View.OnClickListener() {
@@ -308,10 +321,10 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         uploadFile();
     //            startActivity(new Intent(this,PreferencesActivity.class));
         }
-        else if(v==buttonSkip)
-        {
-            Intent intent = new Intent(IDLogin.this,PreferencesActivity.class);
-            startActivity(intent);
-        }
+//        else if(v==nextActivityGo)
+//        {
+//            Intent intent = new Intent(IDLogin.this,PreferencesActivity.class);
+//            startActivity(intent);
+//        }
     }
 }
