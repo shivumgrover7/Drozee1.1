@@ -30,7 +30,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
         public MyViewHolder(View view) {
             super(view);
             pref = (TextView) view.findViewById(R.id.prefTV);
-            author = (TextView)view.findViewById(R.id.authorET);
+            author = (TextView)view.findViewById(R.id.authorTV);
         }
     }
 
@@ -47,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         TextView tv = holder.itemView.findViewById(R.id.prefTV);
-        TextView auth = holder.itemView.findViewById(R.id.authorET);
+        TextView auth = holder.itemView.findViewById(R.id.authorTV);
         Books books = booksList.get(position);
 
         tv.setText(books.getBookname());
