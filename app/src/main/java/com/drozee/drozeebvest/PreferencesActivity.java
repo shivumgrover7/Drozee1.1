@@ -1,5 +1,6 @@
 package com.drozee.drozeebvest;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,10 +53,21 @@ public class PreferencesActivity extends AppCompatActivity {
 //        recyclerView.setAdapter(viewAdapter);
         user = mAuth.getUid();
         final Button add = (Button)findViewById(R.id.addBTN);
+        final Button submit = (Button)findViewById(R.id.addSub);
+
 //        final Button submit = (Button)findViewById(R.id.submitBTN);
           prefET = (EditText)findViewById(R.id.prefET);
         authET = (EditText)findViewById(R.id.authorET);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(booklist.size()>5){
+                startActivity(new Intent(PreferencesActivity.this, Thanks.class));}
+                else Toast.makeText(getApplicationContext(),"Please add atleast 5 books",Toast.LENGTH_LONG).show();
+            }
+        });
 //        submit.setEnabled(false);
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +123,7 @@ public class PreferencesActivity extends AppCompatActivity {
         //Set Custom Font
         Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "CaviarDreams_Bold.ttf");
         add.setTypeface(myCustomFont);
+        submit.setTypeface(myCustomFont);
     }
 
 

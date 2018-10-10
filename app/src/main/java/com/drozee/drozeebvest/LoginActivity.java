@@ -5,9 +5,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     ImageView image;
     FirebaseAuth mAuth;
     FirebaseStorage mStorage;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         editText.setAlpha(0.9f);
         editText4.setAlpha(0.9f);
         imageButton.setAlpha(0.9f);
-
-
+        progressBar= findViewById(R.id.top_progress_bar);
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -85,14 +88,16 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(android.util.Patterns.EMAIL_ADDRESS.matcher(emailstring).matches())
-        {
+        {                    progressBar.setVisibility (View.VISIBLE);
+
             mAuth.signInWithEmailAndPassword (emailstring,PassWord).addOnCompleteListener (new OnCompleteListener<AuthResult>( ) {
 
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-//                    progressBar.setVisibility (View.GONE);
                     if (task.isSuccessful ())
                     {
+                        progressBar.setVisibility (View.GONE);
+
                         //if login is successful then
                         Intent intent = new Intent (LoginActivity.this, IDLogin.class);
                         intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -101,6 +106,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     }else
                     {
+//                        progressBar.setVisibility (View.VISIBLE);
+
                         //else
                         Toast.makeText (getApplicationContext (), task.getException ().getMessage (),Toast.LENGTH_SHORT).show ();
                     }
