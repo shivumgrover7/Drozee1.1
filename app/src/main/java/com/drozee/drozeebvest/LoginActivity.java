@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText editText4;
     @BindView(R.id.imageButton)
     Button imageButton;
+    @BindView(R.id.imageView)
+    ImageView image;
     FirebaseAuth mAuth;
     FirebaseStorage mStorage;
 
@@ -39,6 +42,12 @@ public class LoginActivity extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance();
         imageButton.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
+        image.setAlpha(50);
+        editText.setAlpha(0.9f);
+        editText4.setAlpha(0.9f);
+        imageButton.setAlpha(0.9f);
+
+
 
     }
 

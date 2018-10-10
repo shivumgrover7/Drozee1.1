@@ -7,6 +7,16 @@
     android:background="@drawable/gradientgreen"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/lkasdsd" />
+
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="wrap_content"
@@ -90,7 +100,7 @@
         android:layout_width="188dp"
         android:layout_height="100dp"
         android:layout_alignBottom="@id/linear"
-        android:layout_marginBottom="120sp"
+        android:layout_marginBottom="217sp"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/textlogo" />
 
