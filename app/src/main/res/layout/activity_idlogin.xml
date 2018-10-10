@@ -24,7 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="151dp"
-        android:background="@drawable/edit_round"
+        android:background="@drawable/edittext"
         android:text="From Gallery"
         android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="92dp"
-        android:background="@drawable/edit_round"
+        android:background="@drawable/edittext"
         android:text="Take photo"
 
         android:textSize="20sp" />
@@ -48,7 +48,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="34dp"
-        android:background="@drawable/edit_round"
+        android:background="@drawable/edittext"
         android:text="Upload"
         android:textSize="20sp" />
 

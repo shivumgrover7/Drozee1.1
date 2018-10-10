@@ -23,8 +23,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -44,7 +42,6 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Uri file;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +57,6 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         buttonUpdate = (Button) findViewById(R.id.button_update);
         mStorage = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Photos").child(mAuth.getCurrentUser().getUid());
 
         useriD = mAuth.getCurrentUser().getUid();
 
@@ -248,9 +244,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     progressDialog.setMessage(((int) progress) + "% Uploaded.. ");
                     if(progress==100){
-                        databaseReference.child("picture?").setValue(1);
                         startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
-
                     }
                 }
             });
@@ -301,7 +295,6 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         }
         else if(v== buttonUpdate){
             //upload file
-
             uploadFile();
         }
     }
