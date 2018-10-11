@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import butterknife.BindView;
@@ -34,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     ImageView image;
     FirebaseAuth mAuth;
     FirebaseStorage mStorage;
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mUserReference;
+    String firstLogin;
     ProgressBar progressBar;
 
     @Override
@@ -45,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance();
         imageButton.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
         image.setAlpha(50);
         editText.setAlpha(0.9f);
         editText4.setAlpha(0.9f);
@@ -97,12 +106,29 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful ())
                     {
                         progressBar.setVisibility (View.GONE);
+                        Toast.makeText(LoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                        mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
+                        mUserReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() == null) {
+                                    startActivity(new Intent(LoginActivity.this, IDLogin.class));
+                                    finish();
+                                } else if (dataSnapshot.getValue() != null) {
+                                    if (dataSnapshot.getValue(Boolean.class)) {
+                                        startActivity(new Intent(LoginActivity.this, PreferencesActivity.class));
+                                        finish();
+                                    }
+                                }}
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                            }});
                         //if login is successful then
-                        Intent intent = new Intent (LoginActivity.this, IDLogin.class);
-                        intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity (intent);
-                        Toast.makeText (getApplicationContext (),"log in",Toast.LENGTH_SHORT).show ();
+//                        Intent intent = new Intent (LoginActivity.this, IDLogin.class);
+//                        intent .addFlags (intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivity (intent);
+//                        Toast.makeText (getApplicationContext (),"log in",Toast.LENGTH_SHORT).show ();
 
                     }else
                     {

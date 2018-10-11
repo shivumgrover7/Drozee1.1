@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -44,8 +46,10 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private Uri file;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
-    private TextView nextActivityGo;
-    private Button buttonSkip;
+//    private TextView nextActivityGo;
+//    private Button buttonSkip;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUserReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +66,16 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         mStorage = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 //        buttonSkip = (Button) findViewById(R.id.button_Skip);
-        nextActivityGo = findViewById(R.id.textView5);
+//        nextActivityGo = findViewById(R.id.textView5);
         useriD = mAuth.getCurrentUser().getUid();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
         buttonCamera.setTypeface(typeface);
         buttonGallery.setTypeface(typeface);
-        buttonUpdate.setTypeface(typeface
+        buttonUpdate.setTypeface(typeface);
 
-        );
 
-        nextActivityGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
-            }
-        });
 
 
 //        buttonGallery.setOnClickListener(new View.OnClickListener() {
@@ -220,11 +219,12 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private void showFileChooser(){
 //        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
 //        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
-
-        Intent galleryIntent = new Intent(
-                Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent , 100);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
+//        Intent galleryIntent = new Intent(
+//                Intent.ACTION_PICK,
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(galleryIntent , 100);
     }
     private void takePhoto(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -266,6 +266,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     progressDialog.setMessage(((int) progress) + "% Uploaded.. ");
                     if(progress==100){
+                        mUserReference.setValue(true);
                         startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
                     }
                 }
