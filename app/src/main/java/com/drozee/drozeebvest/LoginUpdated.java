@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -31,43 +30,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginUpdated extends AppCompatActivity {
 
-    @BindView(R.id.editText)
+    @BindView(R.id.email)
     EditText editText;
-    @BindView(R.id.editText4)
+    @BindView(R.id.password)
     EditText editText4;
     @BindView(R.id.imageButton)
     Button imageButton;
-    @BindView(R.id.imageView)
-    ImageView image;
+
     FirebaseAuth mAuth;
     FirebaseStorage mStorage;
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mUserReference;
     String firstLogin;
     ProgressBar progressBar;
-    @BindView(R.id.textView)
+    @BindView(R.id.forgot)
     TextView textView;
-    @BindView(R.id.textView2)
+    @BindView(R.id.signUp)
     TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.loginupdated2);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
         mStorage = FirebaseStorage.getInstance();
-        imageButton.setTypeface(typeface);
+//        imageButton.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        image.setAlpha(50);
-        editText.setAlpha(0.9f);
-        editText4.setAlpha(0.9f);
-        imageButton.setAlpha(0.9f);
+//        editText.setAlpha(0.9f);
+//        editText4.setAlpha(0.9f);
+//        imageButton.setAlpha(0.9f);
         progressBar = findViewById(R.id.top_progress_bar);
         progressBar.setVisibility(View.GONE);
 
@@ -113,19 +110,18 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(LoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginUpdated.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
                         mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
                         mUserReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() == null) {
-                                    startActivity(new Intent(LoginActivity.this, IDLogin.class));
+                                    startActivity(new Intent(LoginUpdated.this, IDLoginup.class));
                                     finish();
                                 } else if (dataSnapshot.getValue() != null) {
-                                    if (dataSnapshot.getValue(Boolean.class)) {
-                                        startActivity(new Intent(LoginActivity.this, PreferencesActivity.class));
+                                        startActivity(new Intent(LoginUpdated.this, IDLoginup.class));
                                         finish();
-                                    }
+
                                 }
                             }
 
@@ -151,16 +147,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.textView, R.id.textView2})
+    @OnClick({R.id.forgot, R.id.signUp})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.textView:
-                startActivity(new Intent(LoginActivity.this,Forgot.class));
+            case R.id.forgot:
+                startActivity(new Intent(LoginUpdated.this,Forgot.class));
                 break;
-            case R.id.textView2:
-                startActivity(new Intent(LoginActivity.this,SignUpMessage.class));
+            case R.id.signUp:
+                startActivity(new Intent(LoginUpdated.this,SignUp.class));
 
                 break;
         }
     }
+
 }

@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/edittext"
     android:padding="10sp"
-    android:layout_margin="15sp">
+    android:layout_margin="14sp">
 
 
     <TextView
@@ -23,4 +22,9 @@
         android:layout_weight="1"
         android:text="TextView"
         android:textSize="18sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6sp"
+        android:background="@android:color/darker_gray"/>
 </LinearLayout>

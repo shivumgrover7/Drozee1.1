@@ -3,6 +3,7 @@ package com.drozee.drozeebvest;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -57,6 +58,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_idlogin);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
         buttonCamera = (Button) findViewById(R.id.button_photo);
@@ -70,6 +72,10 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
         useriD = mAuth.getCurrentUser().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
+        if(mUserReference!=null){
+            startActivity(new Intent(this,PreferencesActivity.class));
+            finish();
+        }
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
         buttonCamera.setTypeface(typeface);
         buttonGallery.setTypeface(typeface);
@@ -219,14 +225,12 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
     private void showFileChooser(){
 //        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
 //        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/").putExtra(Intent.EXTRA_LOCAL_ONLY,true);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
-//        Intent galleryIntent = new Intent(
-//                Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(galleryIntent , 100);
+
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent , 100);
     }
     private void takePhoto(){
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
 
@@ -267,6 +271,7 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                     progressDialog.setMessage(((int) progress) + "% Uploaded.. ");
                     if(progress==100){
                         mUserReference.setValue(true);
+
                         startActivity(new Intent(IDLogin.this,PreferencesActivity.class));
                     }
                 }
@@ -301,7 +306,6 @@ public class IDLogin extends AppCompatActivity implements View.OnClickListener{
                 Toast.makeText(this,"Please allow permssion for storage",Toast.LENGTH_LONG).show();
                 startActivity(new Intent(this, LoginActivity.class));
                 allowpermissionstorage();
-                startActivity(new Intent(this, PreferencesActivity.class));
             }
 
             else if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)

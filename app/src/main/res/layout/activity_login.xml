@@ -56,7 +56,7 @@
             android:drawableLeft="@drawable/ic_lock"
             android:ems="10"
             android:hint="Password"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:paddingLeft="10sp"
             android:paddingRight="10sp" />
     </LinearLayout>

@@ -1,6 +1,7 @@
 package com.drozee.drozeebvest;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ public class PreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preferences);
         mAuth =  FirebaseAuth.getInstance();
         booklist = new ArrayList<> ();
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -61,7 +64,7 @@ public class PreferencesActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(booklist.size()>5){
+                if(booklist.size()>3){
                 startActivity(new Intent(PreferencesActivity.this, Thanks.class));}
                 else Toast.makeText(getApplicationContext(),"Please add atleast 5 books",Toast.LENGTH_LONG).show();
             }

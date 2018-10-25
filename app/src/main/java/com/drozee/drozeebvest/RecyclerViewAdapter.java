@@ -40,19 +40,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.listbooks, parent, false);
         return new MyViewHolder(itemView);
     }
 
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        TextView tv = holder.itemView.findViewById(R.id.prefTV);
-        TextView auth = holder.itemView.findViewById(R.id.authorTV);
+        TextView tv = holder.itemView.findViewById(R.id.textView3);
+        TextView auth = holder.itemView.findViewById(R.id.textView4);
         Books books = booksList.get(position);
 
         tv.setText(books.getBookname());
         auth.setText(books.getAuthor());
+
     }
 
     @Override
