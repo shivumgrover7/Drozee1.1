@@ -1,6 +1,8 @@
 package com.drozee.drozeebvest;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class MainActivitN extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -141,8 +145,22 @@ public class MainActivitN extends AppCompatActivity
             fragment = new Payment_status();
 
         }else if (id == R.id.nav_share) {
-
-
+//            Intent intent = new Intent(Intent.ACTION_SEND);
+//            intent.setType("plain/text");
+//            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
+//            startActivity(Intent.createChooser(intent, ""));
+            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            final PackageManager pm = getPackageManager();
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "teamdrozee@gmail.com" });
+            final List<ResolveInfo> matches = pm.queryIntentActivities(intent, 0);
+            ResolveInfo best = null;
+            for (final ResolveInfo info : matches)
+                if (info.activityInfo.packageName.endsWith(".gm") ||
+                        info.activityInfo.name.toLowerCase().contains("gmail")) best = info;
+            if (best != null)
+                intent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
+            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
 
