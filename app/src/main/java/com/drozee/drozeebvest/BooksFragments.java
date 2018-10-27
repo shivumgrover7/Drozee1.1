@@ -118,6 +118,8 @@ public class BooksFragments extends Fragment {
     public void onViewClicked() {
         Books newbook = new Books(editText5.getText().toString(),editText6.getText().toString());
         mListReference.child(editText5.getText().toString()).setValue(newbook);
+        editText5.setText("");
+        editText6.setText("");
     }
 
 

@@ -69,7 +69,12 @@ public class MainActivitN extends AppCompatActivity
         mUserReference = FirebaseDatabase.getInstance().getReference("UserDetails").child(mAuth.getCurrentUser().getUid());
         View header = mNavigationView.getHeaderView(0);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        Fragment fragmenta = new BooksFragments();
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameCover, fragmenta);
+        fragmentTransaction.commit();
         mProfile = mFirebaseDatabase.getReference("profilePic").child(mAuth.getCurrentUser().getUid());
         mStorage = FirebaseStorage.getInstance().getReference();
 //        mProfile.addListenerForSingleValueEvent(new ValueEventListener() {
