@@ -1,11 +1,14 @@
 package com.drozee.drozeebvest;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,17 +32,22 @@ public class Book extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserReference,mUserRefernces;
+    int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         ButterKnife.bind(this);
+        Toast.makeText(getApplicationContext(),"still book",Toast.LENGTH_SHORT).show();
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         mAuth = FirebaseAuth.getInstance();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserReference = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
-        changeactivity();
+//        changeactivity();
 //        if (mUserReference!=null)
 //        {
 //            startActivity(new Intent(this,MainActivitN.class));
@@ -60,9 +68,11 @@ public class Book extends AppCompatActivity {
 //        mUserRefernces=mUserReference.push();
         mUserReference.child(bookname).child("bookname").setValue(bookname);
         mUserReference.child(bookname).child("author").setValue(author);
-
+        if(flag==0){
+            flag = 1;
+        Log.e("Book","*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",null);
         startActivity(new Intent(this,MainActivitN.class));
-        finish();
+        finish();}
 
     }
     void changeactivity()
@@ -71,8 +81,9 @@ public class Book extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
+                    if(flag==0){
                     startActivity(new Intent(Book.this,MainActivitN.class));
-                    finish();
+                    finish();}
                 }
 
             }

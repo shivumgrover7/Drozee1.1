@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,12 +58,13 @@ public class DetailsSignup extends AppCompatActivity {
     Button imageButton;
     @BindView(R.id.imageView3)
     ImageView prof;
+    public int flag =0,Main=0;
 
     private Uri filefront,fileback,file,file1;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mFirebaseDatabase,dbtest;
-    private DatabaseReference mUserReference,drtest;
+    private DatabaseReference mUserReference,mProfile,drtest,mBook;
 
 
     @Override
@@ -70,6 +72,8 @@ public class DetailsSignup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_signup);
         ButterKnife.bind(this);
+        Toast.makeText(getApplicationContext(),"still Details",Toast.LENGTH_SHORT).show();
+
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -78,12 +82,16 @@ public class DetailsSignup extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 //        buttonSkip = (Button) findViewById(R.id.button_Skip);
 //        nextActivityGo = findViewById(R.id.textView5);
-
+        if(mAuth.getCurrentUser()!=null){
         useriD = mAuth.getCurrentUser().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserReference = mFirebaseDatabase.getReference("UserDetails").child(mAuth.getCurrentUser().getUid());
+        mProfile = mFirebaseDatabase.getReference("profilePic").child(mAuth.getCurrentUser().getUid());
+        mBook = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
+
         dbtest = FirebaseDatabase.getInstance();
-        drtest = dbtest.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
+        drtest = dbtest.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());}
+        else{startActivity(new Intent(this,SignUp.class));}
 
 //        mUserReference.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -227,6 +235,7 @@ public class DetailsSignup extends AppCompatActivity {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading Picture....");
+        progressDialog.setCancelable(false);
         StorageReference riversRef = mStorage.child(mAuth.getCurrentUser().getUid()).child("profile");
 
 
@@ -234,6 +243,8 @@ public class DetailsSignup extends AppCompatActivity {
 //            Toast.makeText(this,"no pic",Toast.LENGTH_SHORT).show();
 //            startActivity(new Intent(DetailsSignup.this,IDLoginup.class));
 //            finish();
+            flag = 0;
+            mProfile.setValue(flag);
             changeactivity();
         }
         if(file!=null) {
@@ -244,7 +255,8 @@ public class DetailsSignup extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), "File Uploaded", Toast.LENGTH_SHORT).show();
-
+                            flag = 1;
+                            mProfile.setValue(flag);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -260,6 +272,7 @@ public class DetailsSignup extends AppCompatActivity {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     progressDialog.setMessage(((int) progress) + "% Uploaded.. ");
                     if(progress==100){
+
                         //checking if idcard exists
                         changeactivity();
 //                        startActivity(new Intent(DetailsSignup.this,IDLoginup.class));
@@ -278,8 +291,31 @@ public class DetailsSignup extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
-                    startActivity(new Intent(DetailsSignup.this,Book.class));
-                    finish();
+                    mBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue()!=null){
+                                if(Main==0){
+                                Log.e("Details","*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",null);
+                                Main = 1;
+                                startActivity(new Intent(DetailsSignup.this,MainActivitN.class));
+                                finish();}
+                            }
+                            else {
+                                if(Main==0){
+                                startActivity(new Intent(DetailsSignup.this,Book.class));
+                                finish();
+                                    Main = 2;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
                 else{
                     startActivity(new Intent(DetailsSignup.this,IDLoginup.class));

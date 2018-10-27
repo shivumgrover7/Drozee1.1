@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
     private Uri filefront,fileback,file;
     private StorageReference mStorage; public String useriD;
     private FirebaseAuth mAuth;
+    int flag = 0;
 //    private TextView nextActivityGo;
 //    private Button buttonSkip;
     private FirebaseDatabase mFirebaseDatabase,dbtest;
@@ -58,6 +60,8 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idloginup);
+        Toast.makeText(getApplicationContext(),"still ID",Toast.LENGTH_SHORT).show();
+
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -76,7 +80,9 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
         useriD = mAuth.getCurrentUser().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
-        changeactivity();
+        drtest = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
+
+//        changeactivity();
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Madeleina Sans.otf");
 //        buttonCamera.setTypeface(typeface);
@@ -266,6 +272,7 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading front image....");
+        progressDialog.setCancelable(false);
         StorageReference riversRef = mStorage.child(useriD).child("ICARDS");
 
         if(filefront!=null && fileback!=null){
@@ -302,7 +309,8 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
         }
 
         progressDialog.setTitle("Uploading back image....");
-        progressDialog.show();
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
         if(fileback!=null) {
             riversRef.child("back").putFile(fileback)
@@ -327,8 +335,9 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     progressDialog.setMessage("back image"+((int) progress) + "% Uploaded.. ");
                     if(progress==100){
-                        startActivity(new Intent(IDLoginup.this,Book.class));
+                        changeactivity();
                         mUserReference.child("value").setValue(true);
+                        finish();
                     }
                 }
             });
@@ -407,12 +416,22 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
     }
     void changeactivity()
     {
-        mUserReference.addValueEventListener(new ValueEventListener() {
+        drtest.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
-                    startActivity(new Intent(IDLoginup.this,Book.class));
-                    finish();
+                    if (flag == 0){
+                    Log.e("ID","*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",null);
+                    flag =1;
+                    startActivity(new Intent(IDLoginup.this,MainActivitN.class));
+                    finish();}
+                }else {
+                    if(flag==0){
+                        flag=2;
+                        Log.e("ID","&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",null);
+
+                        startActivity(new Intent(IDLoginup.this, Book.class));
+                    finish();}
                 }
 
             }

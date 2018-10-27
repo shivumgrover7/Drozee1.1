@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +30,13 @@ import butterknife.Unbinder;
 public class BooksFragments extends Fragment {
 
 
+    @BindView(R.id.editText5)
+    EditText editText5;
+    @BindView(R.id.editText6)
+    EditText editText6;
+    @BindView(R.id.imageButton2)
+    Button imageButton2;
+    Unbinder unbinder;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserReference;
@@ -45,14 +50,17 @@ public class BooksFragments extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bookfragment, null);
+        unbinder = ButterKnife.bind(this, view);
         return view;
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         booklist = new ArrayList<>();
-        mAuth =FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mListReference = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
         recyclerView = (RecyclerView) view.findViewById(R.id.prefRV);
@@ -61,23 +69,35 @@ public class BooksFragments extends Fragment {
 //        recyclerView.setAdapter(viewAdapter);
         String user = mAuth.getCurrentUser().getUid();
 
-
+        editText5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText5.requestFocusFromTouch();
+            }
+        });
+        editText6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText6.requestFocusFromTouch();
+            }
+        });
 
     }
+
     @Override
     public void onStart() {
-        super.onStart ( );
-        mListReference.addValueEventListener (new ValueEventListener( ) {
+        super.onStart();
+        mListReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                booklist.clear ();
-                for (DataSnapshot applianceSnapshot : dataSnapshot.getChildren ()){
+                booklist.clear();
+                for (DataSnapshot applianceSnapshot : dataSnapshot.getChildren()) {
 
-                    Books bookslista = applianceSnapshot.getValue (Books.class);
-                    booklist.add (bookslista);
+                    Books bookslista = applianceSnapshot.getValue(Books.class);
+                    booklist.add(bookslista);
                 }
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter (getActivity(), booklist);
-                recyclerView.setAdapter (adapter);
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), booklist);
+                recyclerView.setAdapter(adapter);
 
             }
 
@@ -88,8 +108,17 @@ public class BooksFragments extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
-
+    @OnClick(R.id.imageButton2)
+    public void onViewClicked() {
+        Books newbook = new Books(editText5.getText().toString(),editText6.getText().toString());
+        mListReference.child(editText5.getText().toString()).setValue(newbook);
+    }
 
 
 //    @OnClick(R.id.imageButton3)

@@ -1,6 +1,8 @@
 package com.drozee.drozeebvest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +48,7 @@ public class SignUp extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserReference, mID, mBook;
-
+    public int flag = 0;
     //    public FirebaseUser user;
     public DatabaseReference databaseReference;
 
@@ -54,10 +56,18 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginupdated);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Toast.makeText(getApplicationContext(),"still sign up",Toast.LENGTH_SHORT).show();
+
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         if (user != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Checking for existing user");
+            progressDialog.setMessage("Please wait");
+            progressDialog.show();
+
             Log.e("emailnot", "sendEmailVerification", null);
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -66,10 +76,11 @@ public class SignUp extends AppCompatActivity {
             mID = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
             mBook = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
             mUserReference.addValueEventListener(new ValueEventListener() {
+
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
 
+                        if (dataSnapshot.getValue() != null) {
                         mID.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,13 +90,20 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.getValue() != null) {
-                                                {
+                                                { if(flag==0){
+
+                                                    Log.e("SignUp",flag+"***********************************************************",null);
+                                                    flag = 1;
                                                     startActivity(new Intent(SignUp.this, MainActivitN.class));
-                                                    finish();
+                                                    finish();}
                                                 }
                                             } else {
+                                                if(flag==0){
+
+                                                    Log.e("SignUp","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",null);
+                                                flag = 2;
                                                 startActivity(new Intent(SignUp.this, Book.class));
-                                                finish();
+                                                finish();}
                                             }
                                         }
 
@@ -95,8 +113,12 @@ public class SignUp extends AppCompatActivity {
                                         }
                                     });
                                 } else {
+                                    if(flag==0){
+
+                                        Log.e("SignUp","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",null);
+                                    flag = 4;
                                     startActivity(new Intent(SignUp.this, IDLoginup.class));
-                                    finish();
+                                    finish();}
                                 }
                             }
 
@@ -107,8 +129,12 @@ public class SignUp extends AppCompatActivity {
                         });
 
                     } else {
+                            if(flag==0){
+
+                                Log.e("SignUp","ASSSSSSSSSSDSDJASDJASJDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",null);
+                        flag = 3;
                         startActivity(new Intent(SignUp.this, DetailsSignup.class));
-                        finish();
+                        finish();}
                     }
                 }
 
