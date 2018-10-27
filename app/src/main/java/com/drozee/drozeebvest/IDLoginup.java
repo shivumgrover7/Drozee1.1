@@ -335,8 +335,8 @@ public class IDLoginup extends AppCompatActivity implements View.OnClickListener
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     progressDialog.setMessage("back image"+((int) progress) + "% Uploaded.. ");
                     if(progress==100){
-                        changeactivity();
                         mUserReference.child("value").setValue(true);
+                        changeactivity();
                         finish();
                     }
                 }

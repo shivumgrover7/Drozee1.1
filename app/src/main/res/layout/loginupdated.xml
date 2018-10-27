@@ -27,25 +27,26 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Let's get you started"
-            android:textColor="@android:color/background_dark"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="63sp"
             android:layout_marginBottom="40sp"
-            android:layout_marginTop="40sp"
+            android:layout_marginTop="20sp"
             android:layout_centerHorizontal="true"
             app:srcCompat="@drawable/drozee" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20sp"
+            android:text="Let's get you started"
+            android:textColor="@android:color/background_dark"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
 
         <EditText
             android:id="@+id/editText"

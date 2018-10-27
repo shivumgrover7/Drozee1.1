@@ -42,7 +42,7 @@ public class LoginUpdated extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseStorage mStorage;
     FirebaseDatabase mFirebaseDatabase;
-    DatabaseReference mUserReference;
+    DatabaseReference mUserReference,mId,mBk;
     String firstLogin;
     ProgressBar progressBar;
     @BindView(R.id.forgot)
@@ -111,16 +111,54 @@ public class LoginUpdated extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(LoginUpdated.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
-                        mUserReference = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
-                        mUserReference.addValueEventListener(new ValueEventListener() {
+                        mUserReference = mFirebaseDatabase.getReference("UserDetails").child(mAuth.getCurrentUser().getUid());
+                        mId = mFirebaseDatabase.getReference("loggedInBefore").child(mAuth.getCurrentUser().getUid());
+                        mBk = mFirebaseDatabase.getReference("Books").child(mAuth.getCurrentUser().getUid());
+
+                        mUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() == null) {
-                                    startActivity(new Intent(LoginUpdated.this, IDLoginup.class));
+                                    startActivity(new Intent(LoginUpdated.this, DetailsSignup.class));
                                     finish();
                                 } else if (dataSnapshot.getValue() != null) {
-                                        startActivity(new Intent(LoginUpdated.this, IDLoginup.class));
-                                        finish();
+                                    mId.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue()!=null){
+                                                mBk.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.getValue()!=null){
+                                                            startActivity(new Intent(LoginUpdated.this, MainActivitN.class));
+                                                            finish();
+                                                        }
+                                                        else {
+                                                            startActivity(new Intent(LoginUpdated.this, Book.class));
+                                                            finish();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                            else{
+                                                startActivity(new Intent(LoginUpdated.this, IDLoginup.class));
+                                                finish();
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
                                 }
                             }
